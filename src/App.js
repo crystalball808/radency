@@ -1,23 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import CSVReader from 'react-csv-reader';
+import Table from './components/Table/Table'
 
 function App() {
+  const [lawyers, setLawyers] = useState([]);
+  const [tableVisible, setTableVisible] = useState(false);
+  const [errorVisible, setErrorVisible] = useState(false)
+
+  const parserOptions = {
+    header: true,
+    dynamicTyping: true,
+    skipEmptyLines: true,
+    transformHeader: (header) => header.toLowerCase().replace(/\W/g, '_'),
+  };
+
+  const handleFileLoaded = (data, fileInfo) => {
+    if (fileInfo.name.split('.').pop() === 'csv') {
+      setLawyers(data);
+      setTableVisible(true);
+      setErrorVisible(false);
+    } else {
+      setTableVisible(false);
+      setErrorVisible(true);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='wrapper'>
+      <CSVReader
+        onFileLoaded={handleFileLoaded}
+        parserOptions={parserOptions}
+      />
+      {tableVisible ? <Table people={lawyers}/> : <></>}
+      {errorVisible ? <div>File format is not correct</div> : <></>}
     </div>
   );
 }
