@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import CSVReader from 'react-csv-reader';
-import Table from './components/Table/Table'
+import Table from './components/Table/Table';
+import './App.css';
 
 function App() {
   const [lawyers, setLawyers] = useState([]);
   const [tableVisible, setTableVisible] = useState(false);
-  const [errorVisible, setErrorVisible] = useState(false)
+  const [errorVisible, setErrorVisible] = useState(false);
 
   const parserOptions = {
     header: true,
@@ -31,7 +32,7 @@ function App() {
         onFileLoaded={handleFileLoaded}
         parserOptions={parserOptions}
       />
-      {tableVisible ? <Table people={lawyers}/> : <></>}
+      {tableVisible ? <Table people={lawyers} /> : <></>}
       {errorVisible ? <div>File format is not correct</div> : <></>}
     </div>
   );
