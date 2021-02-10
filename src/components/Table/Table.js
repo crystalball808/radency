@@ -10,10 +10,59 @@ import {
   validateHasChildren,
   validateStates,
   validateDate,
-  validateLicense
+  validateLicense,
 } from '../../utilities/validators';
+// for (let i; i < people.length; i++) {
+//   if (
+//     lawyer.email.toLowerCase() === people[i].email.toLowerCase() &&
+//     index !== i &&
+//     !lawyer.duplicateByEmail
+//   ) {
+//     newLawyer.duplicateByEmail = i;
+//     return newLawyer;
+//   }
+// }
+const Table = ({ lawyers }) => {
+  const people = lawyers.map((lawyer) => {
+    const newLawyer = Object.assign(lawyer);
+    if (
+      (typeof newLawyer.phone === 'number' &&
+        String(newLawyer.phone).length === 10) ||
+      (String(newLawyer.phone).length === 10 &&
+        String(newLawyer.phone).slice(0, 2) !== '+1')
+    ) {
+      newLawyer.phone = '+1' + newLawyer.phone;
+    } else if (
+      (typeof newLawyer.phone === 'number' &&
+        String(newLawyer.phone).length === 11) ||
+      (String(newLawyer.phone).length === 11 &&
+        String(newLawyer.phone).slice(0, 1) !== '+')
+    ) {
+      newLawyer.phone = '+' + newLawyer.phone;
+    }
+    return newLawyer;
+  });
 
-const Table = ({ people }) => {
+  for (let i=0; i<people.length; i++){
+    for (let j=0; j<people.length; j++){
+      if (people[i].duplicateByEmail || people[i].duplicateByPhone) {
+        break;
+      }
+      else if (people[i].email.toLowerCase().trim() === people[j].email.toLowerCase().trim() && i !== j){
+        people[i].duplicateByEmail = j;
+        people[j].duplicateByEmail = i;
+        break;
+      }
+      else if (people[i].phone.trim() === people[j].phone.trim() && i !== j){
+        people[i].duplicateByPhone = j;
+        people[j].duplicateByPhone = i;
+        break;
+      }
+    }
+  }
+
+  console.log(people);
+
   return (
     <table className='people-table'>
       <thead>
@@ -115,14 +164,18 @@ const Table = ({ people }) => {
               </td>
               <td
                 className={
-                  validateDate(String(person.expiration_date).trim()) ? 'people-table__cell' : 'people-table__cell--wrong'
+                  validateDate(String(person.expiration_date).trim())
+                    ? 'people-table__cell'
+                    : 'people-table__cell--wrong'
                 }
               >
                 {String(person.expiration_date).trim()}
               </td>
               <td
                 className={
-                  validateLicense(person.license_number) ? 'people-table__cell' : 'people-table__cell--wrong'
+                  validateLicense(person.license_number)
+                    ? 'people-table__cell'
+                    : 'people-table__cell--wrong'
                 }
               >
                 {person.license_number}

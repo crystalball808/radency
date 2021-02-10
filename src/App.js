@@ -32,7 +32,7 @@ function App() {
         onFileLoaded={handleFileLoaded}
         parserOptions={parserOptions}
       />
-      {tableVisible ? <Table people={lawyers} /> : <></>}
+      {tableVisible ? <Table lawyers={lawyers} /> : <></>}
       {errorVisible ? <div>File format is not correct</div> : <></>}
     </div>
   );

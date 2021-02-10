@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
 
 export const validateLicense = (license) => {
-    const re = /\w{6}/
-    return re.test(license);
-}
+  const re = /\w{6}/;
+  return re.test(license);
+};
 
 export const validateDate = (dateString) => {
   if (dateString.indexOf('-') > 0 || dateString.indexOf('/') > 0) {
