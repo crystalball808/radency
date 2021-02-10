@@ -1,3 +1,20 @@
+import dayjs from 'dayjs';
+
+export const validateLicense = (license) => {
+    const re = /\w{6}/
+    return re.test(license);
+}
+
+export const validateDate = (dateString) => {
+  if (dateString.indexOf('-') > 0 || dateString.indexOf('/') > 0) {
+    const dateFormatted = dayjs(dateString, ['YYYY-MM-DD', 'MM/DD/YYYY'], true);
+    console.log(dateFormatted);
+    return dateFormatted > dayjs() && dateFormatted.isValid();
+  } else {
+    return false;
+  }
+};
+
 export const validateFullName = (fullName) => {
   const re = /.{2,} .{2,}/;
   return re.test(String(fullName).toLowerCase().trim());

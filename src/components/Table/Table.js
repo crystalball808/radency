@@ -9,6 +9,8 @@ import {
   validateIncome,
   validateHasChildren,
   validateStates,
+  validateDate,
+  validateLicense
 } from '../../utilities/validators';
 
 const Table = ({ people }) => {
@@ -113,14 +115,14 @@ const Table = ({ people }) => {
               </td>
               <td
                 className={
-                  true ? 'people-table__cell' : 'people-table__cell--wrong'
+                  validateDate(String(person.expiration_date).trim()) ? 'people-table__cell' : 'people-table__cell--wrong'
                 }
               >
-                {person.expiration_date}
+                {String(person.expiration_date).trim()}
               </td>
               <td
                 className={
-                  true ? 'people-table__cell' : 'people-table__cell--wrong'
+                  validateLicense(person.license_number) ? 'people-table__cell' : 'people-table__cell--wrong'
                 }
               >
                 {person.license_number}
