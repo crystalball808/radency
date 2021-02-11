@@ -12,17 +12,9 @@ import {
   validateDate,
   validateLicense,
 } from '../../utilities/validators';
-// for (let i; i < people.length; i++) {
-//   if (
-//     lawyer.email.toLowerCase() === people[i].email.toLowerCase() &&
-//     index !== i &&
-//     !lawyer.duplicateByEmail
-//   ) {
-//     newLawyer.duplicateByEmail = i;
-//     return newLawyer;
-//   }
-// }
+
 const Table = ({ lawyers }) => {
+  //formatting phone numbers to +1xxxxxxxxxx
   const people = lawyers.map((lawyer) => {
     const newLawyer = Object.assign(lawyer);
     if (
@@ -43,25 +35,26 @@ const Table = ({ lawyers }) => {
     return newLawyer;
   });
 
-  for (let i=0; i<people.length; i++){
-    for (let j=0; j<people.length; j++){
+  //finding duplicates
+  for (let i = 0; i < people.length; i++) {
+    for (let j = 0; j < people.length; j++) {
       if (people[i].duplicateByEmail || people[i].duplicateByPhone) {
         break;
-      }
-      else if (people[i].email.toLowerCase().trim() === people[j].email.toLowerCase().trim() && i !== j){
+      } else if (
+        people[i].email.toLowerCase().trim() ===
+          people[j].email.toLowerCase().trim() &&
+        i !== j
+      ) {
         people[i].duplicateByEmail = j;
         people[j].duplicateByEmail = i;
         break;
-      }
-      else if (people[i].phone.trim() === people[j].phone.trim() && i !== j){
+      } else if (people[i].phone.trim() === people[j].phone.trim() && i !== j) {
         people[i].duplicateByPhone = j;
         people[j].duplicateByPhone = i;
         break;
       }
     }
   }
-
-  console.log(people);
 
   return (
     <table className='people-table'>
@@ -78,11 +71,11 @@ const Table = ({ lawyers }) => {
           <th className='people-table__cell'>License states</th>
           <th className='people-table__cell'>Expiration date</th>
           <th className='people-table__cell'>License number</th>
+          <th className='people-table__cell'>Duplicate with</th>
         </tr>
       </thead>
       <tbody>
         {people.map((person, i) => {
-          console.log(person);
           return (
             <tr key={i}>
               <td className={'people-table__cell'}>{i}</td>
@@ -97,7 +90,7 @@ const Table = ({ lawyers }) => {
               </td>
               <td
                 className={
-                  validatePhone(person.phone)
+                  validatePhone(person.phone, person.duplicateByPhone)
                     ? 'people-table__cell'
                     : 'people-table__cell--wrong'
                 }
@@ -106,7 +99,7 @@ const Table = ({ lawyers }) => {
               </td>
               <td
                 className={
-                  validateEmail(person.email)
+                  validateEmail(person.email, person.duplicateByEmail)
                     ? 'people-table__cell'
                     : 'people-table__cell--wrong'
                 }
@@ -179,6 +172,12 @@ const Table = ({ lawyers }) => {
                 }
               >
                 {person.license_number}
+              </td>
+              <td className='people-table__cell'>
+                {(typeof person.duplicateByPhone !== 'undefined' &&
+                  String(person.duplicateByPhone)) ||
+                  (typeof person.duplicateByEmail !== 'undefined' &&
+                    String(person.duplicateByEmail))}
               </td>
             </tr>
           );

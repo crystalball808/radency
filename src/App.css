@@ -1,3 +1,17 @@
 body {
-    font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+}
+
+.wrapper {
+  text-align: center;
+  padding-top: 25px;
+}
+
+.csv-input {
+  padding: 10px;
+  display: block;
+  margin: 15px auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }

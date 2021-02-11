@@ -8,7 +8,6 @@ export const validateLicense = (license) => {
 export const validateDate = (dateString) => {
   if (dateString.indexOf('-') > 0 || dateString.indexOf('/') > 0) {
     const dateFormatted = dayjs(dateString, ['YYYY-MM-DD', 'MM/DD/YYYY'], true);
-    console.log(dateFormatted);
     return dateFormatted > dayjs() && dateFormatted.isValid();
   } else {
     return false;
@@ -20,14 +19,17 @@ export const validateFullName = (fullName) => {
   return re.test(String(fullName).toLowerCase().trim());
 };
 
-export const validatePhone = (phoneNumber) => {
+export const validatePhone = (phoneNumber, duplicateByPhone) => {
   const re = /\+?1\d{10}/;
-  return re.test(String(phoneNumber).toLowerCase().trim());
+  return (
+    typeof duplicateByPhone === 'undefined' &&
+    re.test(String(phoneNumber).trim())
+  );
 };
 
-export const validateEmail = (email) => {
+export const validateEmail = (email, duplicateByEmail) => {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase().trim());
+  return !duplicateByEmail && re.test(String(email).toLowerCase().trim());
 };
 
 export const validateAge = (age) => {

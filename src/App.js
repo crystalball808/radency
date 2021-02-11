@@ -12,11 +12,18 @@ function App() {
     header: true,
     dynamicTyping: true,
     skipEmptyLines: true,
-    transformHeader: (header) => header.toLowerCase().replace(/\W/g, '_'),
+    transformHeader: (header) =>
+      header.trim().toLowerCase().replace(/\W/g, '_'),
   };
 
   const handleFileLoaded = (data, fileInfo) => {
-    if (fileInfo.name.split('.').pop() === 'csv') {
+    const headers = Object.keys(data[0]);
+    if (
+      fileInfo.name.split('.').pop() === 'csv' &&
+      headers.includes('full_name') &&
+      headers.includes('phone') &&
+      headers.includes('email')
+    ) {
       setLawyers(data);
       setTableVisible(true);
       setErrorVisible(false);
@@ -29,11 +36,17 @@ function App() {
   return (
     <div className='wrapper'>
       <CSVReader
+        cssClass='react-csv-input'
+        label='Import users'
         onFileLoaded={handleFileLoaded}
         parserOptions={parserOptions}
       />
       {tableVisible ? <Table lawyers={lawyers} /> : <></>}
-      {errorVisible ? <div>File format is not correct</div> : <></>}
+      {errorVisible ? (
+        <div className='error'>File format is not correct</div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
